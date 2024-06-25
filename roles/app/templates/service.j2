@@ -1,0 +1,14 @@
+[Unit]
+Description=XPaste Practicum
+After=network.target
+
+[Service]
+Type=simple
+User=root
+EnvironmentFile=/var/www/xpaste_practicum/.env
+WorkingDirectory=/var/www/xpaste_practicum
+ExecStart=/bin/bash -lc 'source /etc/profile.d/rvm.sh && bundle exec puma -b unix:///var/run/puma.sock -e $RAILS_ENV config.ru'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

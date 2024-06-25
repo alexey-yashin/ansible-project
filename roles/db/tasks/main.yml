@@ -1,0 +1,40 @@
+---
+- name: Install PostgreSQL
+  yum:
+    name: postgresql-server
+    state: present
+
+- name: Initialize the database
+  command: /usr/bin/postgresql-setup initdb
+  args:
+    creates: /var/lib/pgsql/data/pg_hba.conf
+
+- name: Ensure PostgreSQL is running
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+
+- name: Configure PostgreSQL
+  template:
+    src: postgresql.conf.j2
+    dest: /var/lib/pgsql/data/postgresql.conf
+  notify: restart postgresql
+
+- name: Configure pg_hba
+  template:
+    src: pg_hba.conf.j2
+    dest: /var/lib/pgsql/data/pg_hba.conf
+  notify: restart postgresql
+
+- name: Create database
+  postgresql_db:
+    name: "{{ db_name }}"
+    state: present
+
+- name: Create database user
+  postgresql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    state: present
+    role_attr_flags: SUPERUSER

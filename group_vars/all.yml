@@ -1,0 +1,9 @@
+---
+secret_key_base: "eRxybh20#"
+rails_env: "production"
+rails_log_to_stdout: 1
+db_host: "127.0.0.1"
+db_port: "5432"
+db_name: "appslurm"
+db_user: "app"
+db_password: "eRxybh20#"
